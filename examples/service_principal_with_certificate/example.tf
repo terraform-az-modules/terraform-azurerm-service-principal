@@ -5,6 +5,8 @@ provider "azurerm" {
   features {}
 }
 
+data "azurerm_client_config" "current" {}
+
 ##-----------------------------------------------------------------------------
 ## Service Principal
 ##-----------------------------------------------------------------------------
@@ -37,8 +39,9 @@ EOF
   password_rotation_in_years           = 1
   assignments = [
     {
-      scope                = "/subscriptions/1ac2caa4-336e-4daa-b8f1-0fbabe2d4b11"
+      scope                = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
       role_definition_name = "Contributor"
-    },
+      description          = "Grants Contributor access at subscription scope for managing Azure resources"
+    }
   ]
 }

@@ -3,8 +3,9 @@
 ##-----------------------------------------------------------------------------
 provider "azurerm" {
   features {}
-  subscription_id = "1ac2caa4-336e-4daa-b8f1-0fbabe2d4b11"
 }
+
+data "azurerm_client_config" "current" {}
 
 ##-----------------------------------------------------------------------------
 ## Service Principal
@@ -18,7 +19,7 @@ module "service-principal" {
   end_date                   = "2028-02-06T00:00:00Z"
   assignments = [
     {
-      scope                = "/subscriptions/1ac2caa4-336e-4daa-b8f1-0fbabe2d4b11"
+      scope                = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
       role_definition_name = "Contributor"
     },
   ]

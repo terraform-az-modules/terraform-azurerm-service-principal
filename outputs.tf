@@ -18,7 +18,7 @@ output "service_principal_client_id" {
 
 output "client_id" {
   description = "The client ID of the Azure AD application created."
-  value       = try(azuread_application.main.client_id, null)
+  value       = try(azuread_application.main[0].client_id, null)
 }
 
 output "client_secret" {

@@ -18,6 +18,7 @@ module "labels" {
 # Application
 ##-----------------------------------------------------------------------------
 resource "azuread_application" "main" {
+  count                          = var.enable ? 1 : 0
   display_name                   = format("%s-service-principal", module.labels.id)
   identifier_uris                = var.identifier_uris
   device_only_auth_enabled       = var.device_only_auth_enabled
@@ -33,7 +34,7 @@ resource "azuread_application" "main" {
 ##-----------------------------------------------------------------------------
 resource "azuread_service_principal" "main" {
   count                         = var.enable ? 1 : 0
-  client_id                     = azuread_application.main.client_id
+  client_id                     = azuread_application.main[0].client_id
   owners                        = [data.azuread_client_config.current.object_id]
   alternative_names             = var.alternative_names
   account_enabled               = var.account_enabled
@@ -69,7 +70,7 @@ resource "time_rotating" "main" {
 resource "azuread_service_principal_password" "main" {
   count                = var.enable && var.enable_service_principal_certificate == false ? 1 : 0
   service_principal_id = azuread_service_principal.main[0].id
-  display_name         = var.display_name
+  display_name         = var.password_display_name
   end_date             = var.end_date
   rotate_when_changed = {
     rotation = time_rotating.main.id
@@ -95,6 +96,6 @@ resource "azuread_service_principal_certificate" "main" {
 resource "azuread_service_principal_token_signing_certificate" "main" {
   count                = var.enable && var.enable_service_principal_certificate == true ? 1 : 0
   service_principal_id = azuread_service_principal.main[0].id
-  display_name         = "CN=${var.display_name}"
+  display_name         = "CN=${var.certificate_subject_name}"
   end_date             = var.end_date
 }
