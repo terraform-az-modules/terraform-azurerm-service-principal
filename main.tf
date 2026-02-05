@@ -19,7 +19,7 @@ module "labels" {
 ##-----------------------------------------------------------------------------
 resource "azuread_application" "main" {
   count                          = var.enable ? 1 : 0
-  display_name                   = format("%s-service-principal", module.labels.id)
+  display_name                   = var.resource_position_prefix ? format("%s-service-principal", local.name) : format("%s-service-principal", local.name)
   identifier_uris                = var.identifier_uris
   device_only_auth_enabled       = var.device_only_auth_enabled
   fallback_public_client_enabled = var.fallback_public_client_enabled
