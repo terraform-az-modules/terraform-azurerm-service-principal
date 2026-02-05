@@ -5,13 +5,23 @@ on:
       - master
 
 jobs:
-# Update 'Job name' and 'terraform_directory' as needed based on the module structure.
-  complete-example:
+  service_principal_with_certificate:
     if: github.actor != 'dependabot[bot]'
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-pr-checks.yaml@master
     with:
       provider: 'azurerm'
-      terraform_directory: 'examples/complete'
+      terraform_directory: 'examples/service_principal_with_certificate'
+      target_branch: 'master'
+    secrets:
+      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+  service_principal_with_password:
+    if: github.actor != 'dependabot[bot]'
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-pr-checks.yaml@master
+    with:
+      provider: 'azurerm'
+      terraform_directory: 'examples/service_principal_with_password'
       target_branch: 'master'
     secrets:
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}

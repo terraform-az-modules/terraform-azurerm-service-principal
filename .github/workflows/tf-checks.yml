@@ -4,14 +4,21 @@ on:
     branches: [ master ]
   pull_request:
   workflow_dispatch:
+
 jobs:
-# Update 'Job name' and 'working_directory' as needed based on the module structure.
-  complete-example:
+  # Service Principal with Certificate Example
+  service_principal_with_certificate:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
-      working_directory: './examples/complete/'
+      working_directory: './examples/service_principal_with_certificate/'
   
-# Seperate Job for TFlint workflow call
+  # Service Principal with Password Example
+  service_principal_with_password:
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
+    with:
+      working_directory: './examples/service_principal_with_password/'
+  
+  # Separate Job for TFlint workflow call
   tf-lint:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-lint.yml@master
     secrets:
